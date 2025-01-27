@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Controller, useForm } from 'react-hook-form';
 import {
   Text,
   View,
@@ -8,14 +9,23 @@ import {
   Platform,
   Pressable,
 } from 'react-native';
+import { z } from 'zod';
+
+const schema = z.object({
+  email: z.string().email(),
+  password: z.string().min(8),
+});
 
 export function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<z.infer<typeof schema>>({
+    resolver: zodResolver(schema),
+  });
 
-  const handleLogin = () => {
-    console.log('Login attempted with:', email, password);
-  };
+  const onSubmit = (data: z.infer<typeof schema>) => console.log(data);
 
   return (
     <KeyboardAvoidingView
@@ -25,33 +35,55 @@ export function Login() {
       <View style={styles.loginContainer}>
         <Text style={styles.title}>Login</Text>
 
-        <TextInput
-          style={styles.input}
-          placeholderTextColor='#000000'
-          placeholder='Email'
-          value={email}
-          onChangeText={setEmail}
-          keyboardType='email-address'
-          autoCapitalize='none'
-          autoCorrect={false}
-        />
+        <View style={styles.inputContainer}>
+          <Controller
+            control={control}
+            name='email'
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                style={styles.input}
+                placeholderTextColor='#000000'
+                placeholder='Email'
+                value={value}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                keyboardType='email-address'
+                autoCapitalize='none'
+                autoCorrect={false}
+              />
+            )}
+          />
+          {errors.email && (
+            <Text style={styles.error}>{errors.email.message}</Text>
+          )}
 
-        <TextInput
-          style={styles.input}
-          placeholderTextColor='#000000'
-          placeholder='Password'
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-          autoCapitalize='none'
-        />
+          <Controller
+            control={control}
+            name='password'
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                style={styles.input}
+                placeholderTextColor='#000000'
+                placeholder='Password'
+                value={value}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                secureTextEntry
+                autoCapitalize='none'
+              />
+            )}
+          />
+          {errors.password && (
+            <Text style={styles.error}>{errors.password.message}</Text>
+          )}
+        </View>
 
         <Pressable
           style={({ pressed }) => [
             styles.loginButton,
             pressed && styles.loginButtonPressed,
           ]}
-          onPress={handleLogin}
+          onPress={handleSubmit(onSubmit)}
         >
           <Text style={styles.loginButtonText}>Login</Text>
         </Pressable>
@@ -82,8 +114,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5f5f5',
     padding: 15,
     borderRadius: 10,
-    marginBottom: 16,
+    marginBottom: 0,
     fontSize: 16,
+  },
+  inputContainer: {
+    gap: 10,
   },
   loginButton: {
     backgroundColor: '#007AFF',
@@ -110,5 +145,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 16,
     fontWeight: '600',
+  },
+  error: {
+    color: 'red',
+    fontSize: 12,
+    marginTop: 4,
+    marginBottom: 16,
+    marginLeft: 14,
   },
 });
