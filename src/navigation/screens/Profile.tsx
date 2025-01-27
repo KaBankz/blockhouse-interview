@@ -1,15 +1,19 @@
-import { Text } from '@react-navigation/elements';
-import { StaticScreenProps } from '@react-navigation/native';
+import { Text, Button } from '@react-navigation/elements';
 import { StyleSheet, View } from 'react-native';
+import { useAuth } from '../../providers/auth';
 
-type Props = StaticScreenProps<{
-  user: string;
-}>;
+export function Profile() {
+  const {
+    session: { user },
+    signOut,
+  } = useAuth();
 
-export function Profile({ route }: Props) {
   return (
     <View style={styles.container}>
-      <Text>{route.params.user}'s Profile</Text>
+      <Text>Profile</Text>
+      <Text>Email: {user?.email}</Text>
+      <Text>ID: {user?.id}</Text>
+      <Button onPress={signOut}>Sign Out</Button>
     </View>
   );
 }

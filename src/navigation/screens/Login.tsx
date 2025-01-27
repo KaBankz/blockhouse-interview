@@ -10,6 +10,8 @@ import {
   Pressable,
 } from 'react-native';
 import { z } from 'zod';
+import { useAuth } from '../../providers/auth';
+import { useNavigation } from '@react-navigation/native';
 
 const schema = z.object({
   email: z.string().email(),
@@ -17,6 +19,8 @@ const schema = z.object({
 });
 
 export function Login() {
+  const { signIn } = useAuth();
+  const navigation = useNavigation();
   const {
     control,
     handleSubmit,
@@ -25,7 +29,14 @@ export function Login() {
     resolver: zodResolver(schema),
   });
 
-  const onSubmit = (data: z.infer<typeof schema>) => console.log(data);
+  const onSubmit = async (data: z.infer<typeof schema>) => {
+    try {
+      await signIn(data.email, data.password);
+      navigation.navigate('HomeTabs');
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <KeyboardAvoidingView
