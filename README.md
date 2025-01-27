@@ -1,65 +1,63 @@
-# Starter Template with React Navigation
+# Blockhouse Interview
 
-This is a minimal starter template for React Native apps using Expo and React Navigation.
+## Overview
 
-It includes the following:
+This app was bootstrapped with expo using the react navigation template as requested.
 
-- Example [Native Stack](https://reactnavigation.org/docs/native-stack-navigator) with a nested [Bottom Tab](https://reactnavigation.org/docs/bottom-tab-navigator)
-- Web support with [React Native for Web](https://necolas.github.io/react-native-web/)
-- TypeScript support and configured for React Navigation
-- Automatic deep link and URL handling configuration
-- Expo [Development Build](https://docs.expo.dev/develop/development-builds/introduction/) with [Continuous Native Generation](https://docs.expo.dev/workflow/continuous-native-generation/)
-- Edge-to-edge configured on Android with [`react-native-edge-to-edge`](https://www.npmjs.com/package/react-native-edge-to-edge)
+Authentication is handled using react context to create an auth provider, and is persisted using expo-sqlite/kv.
 
-## Getting Started
+> [!NOTE]
+> I'm not using async storage because it is slow garbage.
+>
+> I would usually use mmkv, but I wanted this to support expo go for easy testing, so I used expo-sqlite/kv.
 
-1. Create a new project using this template:
+> [!IMPORTANT]
+> The auth setup is VERY basic and signin does not work because it is impossible to do without a backend. I did the most basic auth setup I could to meet the requirements with the limitations.
 
-   ```sh
-   npx create-expo-app@latest --template react-navigation/template
-   ```
+React navigation is used for the navigation, and is setup as according to their docs and the initial template.
 
-2. Edit the `app.json` file to configure the `name`, `slug`, `scheme` and bundle identifiers (`ios.bundleIdentifier` and `android.bundleIdentifier`) for your app.
+> [!NOTE]
+> I'm not a fan of react navigation, I strongly prefer Expo Router because file based declarative navigation is just better than imperative navigation.
+>
+> Expo Router also add's a ton of other features on top of react navigation, like rsc's layout routes, and it's fully cross platform.
+>
+> But, because of the constraints of the interview, I'm using react navigation.
 
-3. Edit the `src/App.tsx` file to start working on your app.
+## CI/CD
 
-## Running the app
+I added a github action that runs on every push to the master branch, that runs automated linting and typechecking.
 
-- Install the dependencies:
+I also added a github action that runs on every push to the master branch, that builds the app using EAS.
 
-  ```sh
-  npm install
-  ```
+> [!NOTE]
+> For the build workflow to work, you need to create a project on EAS and add the `EXPO_TOKEN` to the repo secrets.
 
-- Start the development server:
+> [!IMPORTANT]
+> This setup of the workflows, is not the best way in my opinion, but because it was requested to be done in the interview, I did it this way.
+>
+> It would be better to run required ci checks on each pr, these ci checks would be much more through than the ones I've setup here.
+>
+> Then another workflow would be setup to run on push to master to do a branch healthcheck, to make sure the master branch is healthy.
+>
+> Lastly, builds would be done entirely on EAS using their github integration, this would be way more efficient and faster.
 
-  ```sh
-  npm start
-  ```
+## Conclusion
 
-- Build and run iOS and Android development builds:
+I've done my best to address all the requirements of the interview, and I've documented my thought process and decisions in this README.
 
-  ```sh
-  npm run ios
-  # or
-  npm run android
-  ```
+Overall, although I've meet the requirements, I'm not happy with the setup since, it could be much better.
 
-- In the terminal running the development server, press `i` to open the iOS simulator, `a` to open the Android device or emulator, or `w` to open the web browser.
+The navigation could be more secure (authwalled routes), it could be simpler, and it could handle splash screens better. All of this would've been easy to do with expo router.
 
-## Notes
+The auth setup is VERY basic, I can't stress this enough. Without a backend, it is impossible to do email pass authentication. If I was able to use a backend, I would've threw in supabase auth, or clerk auth for an actual auth setup.
 
-This project uses a [development build](https://docs.expo.dev/develop/development-builds/introduction/) and cannot be run with [Expo Go](https://expo.dev/go). To run the app with Expo Go, edit the `package.json` file, remove the `expo-dev-client` package and `--dev-client` flag from the `start` script. However, Edge-to-edge won't work on Expo Go.
+If I did't want to support Expo Go, I would've used react native mmkv, for a blazing fast kv storage.
 
-We highly recommend using the development builds for normal development and testing.
+I would've also used nativewind for styling, because tailwind is the best way to style period. (in my opinion 😜)
 
-The `ios` and `android` folder are gitignored in the project by default as they are automatically generated during the build process ([Continuous Native Generation](https://docs.expo.dev/workflow/continuous-native-generation/)). This means that you should not edit these folders directly and use [config plugins](https://docs.expo.dev/config-plugins/) instead. However, if you need to edit these folders, you can remove them from the `.gitignore` file so that they are tracked by git.
+I would've also made a bunch of more optimizations, like using the react compiler, expo's tree shaking, and a bunch of other stuff.
 
-## Resources
+This code does not represent my best work, not by a long shot.
+Feel free to look through my github to see my other work, to see how I usually do things, especially [Exponent](https://github.com/kabankz/exponent). That's my go to expo template that I made myself that contains a ton of optimizations and best practices. I constantly update it with the latest and greatest expo features. It use it constantly as a reference for best practices in react native, along with other packages that I've setup on it like eslint, prettier, github actions, and more.
 
-- [React Navigation documentation](https://reactnavigation.org/)
-- [Expo documentation](https://docs.expo.dev/)
-
----
-
-Demo assets are from [lucide.dev](https://lucide.dev/)
+If you want to see an even more advanced expo app I've made, reach out to me and I'll show you how I do react native monorepos, using pnpm, expo, supabase auth, supabase db, drizzle, trpc, and more.
