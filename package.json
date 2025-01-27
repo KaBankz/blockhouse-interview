@@ -6,7 +6,9 @@
     "start": "expo start --dev-client",
     "web": "expo start --web",
     "android": "expo run:android",
-    "ios": "expo run:ios"
+    "ios": "expo run:ios",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@expo/metro-runtime": "~4.0.0",
@@ -35,7 +37,12 @@
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@types/react": "~18.3.12",
+    "eslint": "^8",
+    "eslint-config-universe": "^14.0.0",
     "typescript": "^5.7.2"
   },
-  "private": true
+  "private": true,
+  "eslintConfig": {
+    "extends": "universe/native"
+  }
 }
