@@ -44,5 +44,6 @@
   "private": true,
   "eslintConfig": {
     "extends": "universe/native"
-  }
+  },
+  "packageManager": "yarn@1.22.22"
 }
