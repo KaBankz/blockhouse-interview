@@ -7,7 +7,7 @@ on:
       - master
 
 concurrency:
-  group: ${{ github.ref }}
+  group: ${{ github.ref }}/ci
   cancel-in-progress: true
 
 env:
