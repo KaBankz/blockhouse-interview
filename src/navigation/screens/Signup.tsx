@@ -9,12 +9,13 @@ import {
   Pressable,
 } from 'react-native';
 
-export function Login() {
+export function Signup() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
-  const handleLogin = () => {
-    console.log('Login attempted with:', email, password);
+  const handleSignup = () => {
+    console.log('Signup attempted with:', email, password, confirmPassword);
   };
 
   return (
@@ -22,8 +23,8 @@ export function Login() {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.container}
     >
-      <View style={styles.loginContainer}>
-        <Text style={styles.title}>Login</Text>
+      <View style={styles.signupContainer}>
+        <Text style={styles.title}>Signup</Text>
 
         <TextInput
           style={styles.input}
@@ -46,14 +47,24 @@ export function Login() {
           autoCapitalize='none'
         />
 
+        <TextInput
+          style={styles.input}
+          placeholderTextColor='#000000'
+          placeholder='Confirm Password'
+          value={confirmPassword}
+          onChangeText={setConfirmPassword}
+          secureTextEntry
+          autoCapitalize='none'
+        />
+
         <Pressable
           style={({ pressed }) => [
-            styles.loginButton,
-            pressed && styles.loginButtonPressed,
+            styles.signupButton,
+            pressed && styles.signupButtonPressed,
           ]}
-          onPress={handleLogin}
+          onPress={handleSignup}
         >
-          <Text style={styles.loginButtonText}>Login</Text>
+          <Text style={styles.signupButtonText}>Signup</Text>
         </Pressable>
       </View>
     </KeyboardAvoidingView>
@@ -65,7 +76,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-  loginContainer: {
+  signupContainer: {
     flex: 1,
     justifyContent: 'center',
     paddingHorizontal: 20,
@@ -85,7 +96,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     fontSize: 16,
   },
-  loginButton: {
+  signupButton: {
     backgroundColor: '#007AFF',
     padding: 15,
     borderRadius: 10,
@@ -99,13 +110,13 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
   },
-  loginButtonPressed: {
+  signupButtonPressed: {
     backgroundColor: '#0056b3',
     transform: [{ scale: 0.98 }],
     elevation: 1,
     shadowOpacity: 0.15,
   },
-  loginButtonText: {
+  signupButtonText: {
     color: '#fff',
     textAlign: 'center',
     fontSize: 16,
