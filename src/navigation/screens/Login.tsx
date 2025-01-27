@@ -12,6 +12,7 @@ import {
 import { z } from 'zod';
 import { useAuth } from '../../providers/auth';
 import { useNavigation } from '@react-navigation/native';
+import { Button } from '@react-navigation/elements';
 
 const schema = z.object({
   email: z.string().email(),
@@ -98,6 +99,10 @@ export function Login() {
         >
           <Text style={styles.loginButtonText}>Login</Text>
         </Pressable>
+
+        <Button style={styles.signupButton} screen='Signup'>
+          Sign Up
+        </Button>
       </View>
     </KeyboardAvoidingView>
   );
@@ -163,5 +168,12 @@ const styles = StyleSheet.create({
     marginTop: 4,
     marginBottom: 16,
     marginLeft: 14,
+  },
+  signupButton: {
+    backgroundColor: 'transparent',
+    padding: 15,
+    borderRadius: 10,
+    marginTop: 10,
+    elevation: 2,
   },
 });

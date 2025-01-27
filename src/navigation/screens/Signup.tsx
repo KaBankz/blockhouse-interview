@@ -9,7 +9,10 @@ import {
   Platform,
   Pressable,
 } from 'react-native';
+import { Button } from '@react-navigation/elements';
 import { z } from 'zod';
+import { useAuth } from '../../providers/auth';
+import { useNavigation } from '@react-navigation/native';
 
 const schema = z
   .object({
@@ -23,6 +26,9 @@ const schema = z
   });
 
 export function Signup() {
+  const { signUp } = useAuth();
+  const navigation = useNavigation();
+
   const {
     control,
     handleSubmit,
@@ -31,7 +37,14 @@ export function Signup() {
     resolver: zodResolver(schema),
   });
 
-  const onSubmit = (data: z.infer<typeof schema>) => console.log(data);
+  const onSubmit = async (data: z.infer<typeof schema>) => {
+    try {
+      await signUp(data.email, data.password);
+      navigation.navigate('HomeTabs');
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <KeyboardAvoidingView
@@ -113,6 +126,10 @@ export function Signup() {
         >
           <Text style={styles.signupButtonText}>Signup</Text>
         </Pressable>
+
+        <Button style={styles.loginButton} screen='Login'>
+          Login
+        </Button>
       </View>
     </KeyboardAvoidingView>
   );
@@ -178,5 +195,12 @@ const styles = StyleSheet.create({
     marginTop: 4,
     marginBottom: 16,
     marginLeft: 14,
+  },
+  loginButton: {
+    backgroundColor: 'transparent',
+    padding: 15,
+    borderRadius: 10,
+    marginTop: 10,
+    elevation: 2,
   },
 });

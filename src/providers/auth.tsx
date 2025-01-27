@@ -1,4 +1,28 @@
 import { createContext, useContext, useState } from 'react';
+import { Storage } from 'expo-sqlite/kv-store';
+
+const KVStore = {
+  setUser: async (user: User & { password: string }) => {
+    await Storage.setItem('user', JSON.stringify(user));
+  },
+
+  getUser: async (email: string, password: string) => {
+    const user = await Storage.getItem('user');
+
+    if (user) {
+      const parsedUser = JSON.parse(user);
+      if (parsedUser.email === email && parsedUser.password === password) {
+        return parsedUser as User;
+      }
+    }
+
+    return null;
+  },
+
+  removeUser: async () => {
+    await Storage.removeItem('user');
+  },
+};
 
 type User = {
   id: string;
@@ -26,12 +50,26 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signIn = async (email: string, password: string) => {
     console.log('User Signed In', email, password);
-    setUser({ id: '1', email: email });
+    const user = await KVStore.getUser(email, password);
+
+    if (user) {
+      setUser(user);
+    } else {
+      throw new Error('Invalid email or password');
+    }
   };
 
   const signUp = async (email: string, password: string) => {
     const randomId = Math.random().toString(36).substring(2, 15);
     console.log('User Signed Up', email, password, randomId);
+
+    const user = await KVStore.getUser(email, password);
+
+    if (user) {
+      throw new Error('User already exists');
+    }
+
+    KVStore.setUser({ id: randomId, email: email, password: password });
     setUser({ id: randomId, email: email });
   };
 
