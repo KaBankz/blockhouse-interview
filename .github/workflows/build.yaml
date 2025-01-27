@@ -36,5 +36,8 @@ jobs:
       - name: Install Dependencies
         run: yarn --frozen-lockfile
 
-      - name: Build App
-        run: eas build --non-interactive
+      - name: Build iOS App
+        run: eas build --non-interactive --platform ios
+
+      - name: Build Android App
+        run: eas build --non-interactive --platform android
