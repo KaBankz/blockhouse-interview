@@ -1,13 +1,13 @@
-import { createContext, useContext, useEffect, useState } from 'react';
-import { Storage } from 'expo-sqlite/kv-store';
+import { Storage } from "expo-sqlite/kv-store";
+import { createContext, useContext, useEffect, useState } from "react";
 
 const KVStore = {
   setUser: async (user: User) => {
-    await Storage.setItem('user', JSON.stringify(user));
+    await Storage.setItem("user", JSON.stringify(user));
   },
 
   getUser: async () => {
-    const user = await Storage.getItem('user');
+    const user = await Storage.getItem("user");
 
     if (user) {
       const parsedUser = JSON.parse(user);
@@ -18,7 +18,7 @@ const KVStore = {
   },
 
   removeUser: async () => {
-    await Storage.removeItem('user');
+    await Storage.removeItem("user");
   },
 };
 
@@ -47,36 +47,36 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
 
   const signIn = async (email: string, password: string) => {
-    console.log('User Signed In', email, password);
+    console.log("User Signed In", email, password);
     const user = await KVStore.getUser();
 
     if (user) {
       if (user.email === email) {
         setUser(user);
       } else {
-        throw new Error('Invalid email or password');
+        throw new Error("Invalid email or password");
       }
     } else {
-      throw new Error('Invalid email or password');
+      throw new Error("Invalid email or password");
     }
   };
 
   const signUp = async (email: string, password: string) => {
     const randomId = Math.random().toString(36).substring(2, 15);
-    console.log('User Signed Up', email, password, randomId);
+    console.log("User Signed Up", email, password, randomId);
 
     const user = await KVStore.getUser();
 
     if (user) {
-      throw new Error('User already exists');
+      throw new Error("User already exists");
     }
 
-    KVStore.setUser({ id: randomId, email: email });
-    setUser({ id: randomId, email: email });
+    KVStore.setUser({ id: randomId, email });
+    setUser({ id: randomId, email });
   };
 
   const signOut = async () => {
-    console.log('User Signed Out');
+    console.log("User Signed Out");
     KVStore.removeUser();
     setUser(null);
   };

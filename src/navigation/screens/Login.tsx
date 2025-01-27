@@ -1,5 +1,7 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Controller, useForm } from 'react-hook-form';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Button } from "@react-navigation/elements";
+import { useNavigation } from "@react-navigation/native";
+import { Controller, useForm } from "react-hook-form";
 import {
   Text,
   View,
@@ -8,11 +10,10 @@ import {
   KeyboardAvoidingView,
   Platform,
   Pressable,
-} from 'react-native';
-import { z } from 'zod';
-import { useAuth } from '../../providers/auth';
-import { useNavigation } from '@react-navigation/native';
-import { Button } from '@react-navigation/elements';
+} from "react-native";
+import { z } from "zod";
+
+import { useAuth } from "../../providers/auth";
 
 const schema = z.object({
   email: z.string().email(),
@@ -33,7 +34,7 @@ export function Login() {
   const onSubmit = async (data: z.infer<typeof schema>) => {
     try {
       await signIn(data.email, data.password);
-      navigation.navigate('HomeTabs');
+      navigation.navigate("HomeTabs");
     } catch (error) {
       console.error(error);
     }
@@ -41,7 +42,7 @@ export function Login() {
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={styles.container}
     >
       <View style={styles.loginContainer}>
@@ -50,17 +51,17 @@ export function Login() {
         <View style={styles.inputContainer}>
           <Controller
             control={control}
-            name='email'
+            name="email"
             render={({ field: { onChange, onBlur, value } }) => (
               <TextInput
                 style={styles.input}
-                placeholderTextColor='#000000'
-                placeholder='Email'
+                placeholderTextColor="#000000"
+                placeholder="Email"
                 value={value}
                 onBlur={onBlur}
                 onChangeText={onChange}
-                keyboardType='email-address'
-                autoCapitalize='none'
+                keyboardType="email-address"
+                autoCapitalize="none"
                 autoCorrect={false}
               />
             )}
@@ -71,17 +72,17 @@ export function Login() {
 
           <Controller
             control={control}
-            name='password'
+            name="password"
             render={({ field: { onChange, onBlur, value } }) => (
               <TextInput
                 style={styles.input}
-                placeholderTextColor='#000000'
-                placeholder='Password'
+                placeholderTextColor="#000000"
+                placeholder="Password"
                 value={value}
                 onBlur={onBlur}
                 onChangeText={onChange}
                 secureTextEntry
-                autoCapitalize='none'
+                autoCapitalize="none"
               />
             )}
           />
@@ -100,7 +101,7 @@ export function Login() {
           <Text style={styles.loginButtonText}>Login</Text>
         </Pressable>
 
-        <Button style={styles.signupButton} screen='Signup'>
+        <Button style={styles.signupButton} screen="Signup">
           Sign Up
         </Button>
       </View>
@@ -111,23 +112,23 @@ export function Login() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   loginContainer: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
     paddingHorizontal: 20,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   title: {
     fontSize: 28,
-    fontWeight: 'bold',
-    color: '#333',
+    fontWeight: "bold",
+    color: "#333",
     marginBottom: 40,
-    textAlign: 'center',
+    textAlign: "center",
   },
   input: {
-    backgroundColor: '#f5f5f5',
+    backgroundColor: "#f5f5f5",
     padding: 15,
     borderRadius: 10,
     marginBottom: 0,
@@ -137,12 +138,12 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   loginButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: "#007AFF",
     padding: 15,
     borderRadius: 10,
     marginTop: 10,
     elevation: 2,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,
@@ -151,26 +152,26 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
   },
   loginButtonPressed: {
-    backgroundColor: '#0056b3',
+    backgroundColor: "#0056b3",
     transform: [{ scale: 0.98 }],
     elevation: 1,
     shadowOpacity: 0.15,
   },
   loginButtonText: {
-    color: '#fff',
-    textAlign: 'center',
+    color: "#fff",
+    textAlign: "center",
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   error: {
-    color: 'red',
+    color: "red",
     fontSize: 12,
     marginTop: 4,
     marginBottom: 16,
     marginLeft: 14,
   },
   signupButton: {
-    backgroundColor: 'transparent',
+    backgroundColor: "transparent",
     padding: 15,
     borderRadius: 10,
     marginTop: 10,

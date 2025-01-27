@@ -1,28 +1,29 @@
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { HeaderButton, Text } from '@react-navigation/elements';
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { HeaderButton, Text } from "@react-navigation/elements";
 import {
   createStaticNavigation,
   StaticParamList,
-} from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Image } from 'react-native';
-import bell from '../assets/bell.png';
-import newspaper from '../assets/newspaper.png';
-import { Home } from './screens/Home';
-import { Profile } from './screens/Profile';
-import { Settings } from './screens/Settings';
-import { Updates } from './screens/Updates';
-import { NotFound } from './screens/NotFound';
-import { Login } from './screens/Login';
-import { Signup } from './screens/Signup';
-import { useAuth } from '../providers/auth';
+} from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { Image } from "react-native";
+
+import bell from "../assets/bell.png";
+import newspaper from "../assets/newspaper.png";
+import { Home } from "./screens/Home";
+import { Login } from "./screens/Login";
+import { NotFound } from "./screens/NotFound";
+import { Profile } from "./screens/Profile";
+import { Settings } from "./screens/Settings";
+import { Signup } from "./screens/Signup";
+import { Updates } from "./screens/Updates";
+import { useAuth } from "../providers/auth";
 
 const HomeTabs = createBottomTabNavigator({
   screens: {
     Home: {
       screen: Home,
       options: {
-        title: 'Feed',
+        title: "Feed",
         tabBarIcon: ({ color, size }) => (
           <Image
             source={newspaper}
@@ -66,21 +67,21 @@ const RootStack = createNativeStackNavigator({
       if: () => !isSignedIn(),
       screen: Signup,
       options: {
-        title: 'Signup',
+        title: "Signup",
       },
     },
     Login: {
       if: () => !isSignedIn(),
       screen: Login,
       options: {
-        title: 'Login',
+        title: "Login",
       },
     },
     HomeTabs: {
       if: () => isSignedIn(),
       screen: HomeTabs,
       options: {
-        title: 'Home',
+        title: "Home",
         headerShown: false,
       },
     },
@@ -88,9 +89,9 @@ const RootStack = createNativeStackNavigator({
       if: () => isSignedIn(),
       screen: Profile,
       linking: {
-        path: ':user(@[a-zA-Z0-9-_]+)',
+        path: ":user(@[a-zA-Z0-9-_]+)",
         parse: {
-          user: (value) => value.replace(/^@/, ''),
+          user: (value) => value.replace(/^@/, ""),
         },
         stringify: {
           user: (value) => `@${value}`,
@@ -101,7 +102,7 @@ const RootStack = createNativeStackNavigator({
       if: () => isSignedIn(),
       screen: Settings,
       options: ({ navigation }) => ({
-        presentation: 'modal',
+        presentation: "modal",
         headerRight: () => (
           <HeaderButton onPress={navigation.goBack}>
             <Text>Close</Text>
@@ -112,10 +113,10 @@ const RootStack = createNativeStackNavigator({
     NotFound: {
       screen: NotFound,
       options: {
-        title: '404',
+        title: "404",
       },
       linking: {
-        path: '*',
+        path: "*",
       },
     },
   },

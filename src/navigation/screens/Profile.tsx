@@ -1,6 +1,7 @@
-import { Text, Button } from '@react-navigation/elements';
-import { StyleSheet, View } from 'react-native';
-import { useAuth } from '../../providers/auth';
+import { Text, Button } from "@react-navigation/elements";
+import { StyleSheet, View } from "react-native";
+
+import { useAuth } from "../../providers/auth";
 
 export function Profile() {
   const {
@@ -21,8 +22,8 @@ export function Profile() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     gap: 10,
   },
 });
