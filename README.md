@@ -51,7 +51,7 @@ React navigation is used for the navigation, and is setup as according to their 
 
 ## CI/CD
 
-I added a github action that runs on every push to the master branch, that runs automated linting and typechecking.
+I added a github action that runs on every push to the master branch, that runs automated linting and typechecking, along with expo doctor for a quick health check.
 
 I also added a github action that runs on every push to the master branch, that builds the app using EAS.
 
