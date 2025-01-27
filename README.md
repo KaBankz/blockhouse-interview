@@ -1,5 +1,31 @@
 # Blockhouse Interview
 
+## Getting Started
+
+> [!IMPORTANT]
+> If you don't use bun, you can use yarn or npm instead.
+>
+> A yarn lockfile is also included, so use what suits you best.
+>
+> The node version is also managed by mise, check the config to see what version is required.
+
+```bash
+bun install
+```
+
+```bash
+bun start
+```
+
+This will open up the app in expo go on your simulator.
+
+We are not using CNG since that would add more complexity for the setup process. Instead we are using Expo Go, for a blazing fast setup.
+
+> [!NOTE]
+> Yes, I know Expo Go is not recommended, but considering this project, it is a great fit. Unless we were actually adding in native code, Expo Go is the easiest way to test the app.
+>
+> But, if you want to test the app using CNG, by all means go ahead by running `bun ios`
+
 ## Overview
 
 This app was bootstrapped with expo using the react navigation template as requested.
