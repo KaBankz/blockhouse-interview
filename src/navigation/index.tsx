@@ -15,6 +15,7 @@ import { Updates } from './screens/Updates';
 import { NotFound } from './screens/NotFound';
 import { Login } from './screens/Login';
 import { Signup } from './screens/Signup';
+import { useAuth } from '../providers/auth';
 
 const HomeTabs = createBottomTabNavigator({
   screens: {
@@ -52,21 +53,31 @@ const HomeTabs = createBottomTabNavigator({
   },
 });
 
+const isSignedIn = () => {
+  const {
+    session: { user },
+  } = useAuth();
+  return !!user;
+};
+
 const RootStack = createNativeStackNavigator({
   screens: {
-    Login: {
-      screen: Login,
-      options: {
-        title: 'Login',
-      },
-    },
     Signup: {
+      if: () => !isSignedIn(),
       screen: Signup,
       options: {
         title: 'Signup',
       },
     },
+    Login: {
+      if: () => !isSignedIn(),
+      screen: Login,
+      options: {
+        title: 'Login',
+      },
+    },
     HomeTabs: {
+      if: () => isSignedIn(),
       screen: HomeTabs,
       options: {
         title: 'Home',
@@ -74,6 +85,7 @@ const RootStack = createNativeStackNavigator({
       },
     },
     Profile: {
+      if: () => isSignedIn(),
       screen: Profile,
       linking: {
         path: ':user(@[a-zA-Z0-9-_]+)',
@@ -86,6 +98,7 @@ const RootStack = createNativeStackNavigator({
       },
     },
     Settings: {
+      if: () => isSignedIn(),
       screen: Settings,
       options: ({ navigation }) => ({
         presentation: 'modal',

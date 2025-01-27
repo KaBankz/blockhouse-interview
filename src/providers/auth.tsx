@@ -1,19 +1,17 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { Storage } from 'expo-sqlite/kv-store';
 
 const KVStore = {
-  setUser: async (user: User & { password: string }) => {
+  setUser: async (user: User) => {
     await Storage.setItem('user', JSON.stringify(user));
   },
 
-  getUser: async (email: string, password: string) => {
+  getUser: async () => {
     const user = await Storage.getItem('user');
 
     if (user) {
       const parsedUser = JSON.parse(user);
-      if (parsedUser.email === email && parsedUser.password === password) {
-        return parsedUser as User;
-      }
+      return parsedUser as User;
     }
 
     return null;
@@ -50,10 +48,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signIn = async (email: string, password: string) => {
     console.log('User Signed In', email, password);
-    const user = await KVStore.getUser(email, password);
+    const user = await KVStore.getUser();
 
     if (user) {
-      setUser(user);
+      if (user.email === email) {
+        setUser(user);
+      } else {
+        throw new Error('Invalid email or password');
+      }
     } else {
       throw new Error('Invalid email or password');
     }
@@ -63,22 +65,29 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const randomId = Math.random().toString(36).substring(2, 15);
     console.log('User Signed Up', email, password, randomId);
 
-    const user = await KVStore.getUser(email, password);
+    const user = await KVStore.getUser();
 
     if (user) {
       throw new Error('User already exists');
     }
 
-    KVStore.setUser({ id: randomId, email: email, password: password });
+    KVStore.setUser({ id: randomId, email: email });
     setUser({ id: randomId, email: email });
   };
 
   const signOut = async () => {
     console.log('User Signed Out');
+    KVStore.removeUser();
     setUser(null);
   };
 
   const session: Session = { user };
+
+  useEffect(() => {
+    KVStore.getUser().then((user) => {
+      setUser(user);
+    });
+  }, []);
 
   return (
     <AuthContext.Provider value={{ signIn, signUp, signOut, session }}>
